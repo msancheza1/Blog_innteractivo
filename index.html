@@ -1,0 +1,682 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .blog-wrap {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 0 4rem;
+  }
+
+  .hero {
+    background: #0a0a0f;
+    color: #e8e0d0;
+    padding: 3rem 2rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 2.5rem;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 100%, #1a1a3e 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #8a7a60;
+    margin-bottom: 1rem;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 300;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #f0e8d8;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #9a8f7a;
+    line-height: 1.6;
+    max-width: 480px;
+    position: relative;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    font-size: 12px;
+    color: #6a6050;
+    letter-spacing: 0.08em;
+    position: relative;
+  }
+  .hero-stars {
+    position: absolute;
+    top: 1.5rem; right: 2rem;
+    font-size: 11px;
+    color: #3a3a5a;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 3px;
+    background: var(--color-border-tertiary);
+    margin-bottom: 2rem;
+  }
+  .progress-fill {
+    height: 100%;
+    background: #8a7a60;
+    width: 0%;
+    transition: width 0.1s;
+  }
+
+  .timeline-nav {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    margin-bottom: 2.5rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    scrollbar-width: none;
+  }
+  .timeline-nav::-webkit-scrollbar { display: none; }
+  .tn-btn {
+    padding: 0.5rem 1rem;
+    font-size: 12px;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    position: relative;
+    bottom: -1px;
+  }
+  .tn-btn:hover { color: var(--color-text-primary); }
+  .tn-btn.active {
+    color: var(--color-text-primary);
+    border-bottom-color: #8a7a60;
+    font-weight: 600;
+  }
+
+  .chapter {
+    padding: 0 1.5rem;
+    margin-bottom: 3rem;
+    display: none;
+  }
+  .chapter.visible { display: block; }
+
+  .ch-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .ch-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--color-border-secondary);
+    line-height: 1;
+    min-width: 80px;
+    opacity: 0.25;
+  }
+  .ch-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--color-text-primary);
+    line-height: 1.3;
+    padding-top: 0.3rem;
+  }
+
+  .ch-body {
+    font-size: 0.975rem;
+    line-height: 1.85;
+    color: var(--color-text-secondary);
+  }
+  .ch-body p { margin-bottom: 1rem; }
+
+  .ch-quote {
+    border-left: 2px solid #8a7a60;
+    padding: 0.75rem 1.25rem;
+    margin: 1.5rem 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--color-text-primary);
+    line-height: 1.6;
+    background: var(--color-background-secondary);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+  }
+
+  .ch-insight {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+  .ch-insight strong {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a7a60;
+    margin-bottom: 0.4rem;
+    font-weight: 500;
+    font-family: 'Source Serif 4', serif;
+  }
+
+  .ch-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 1.5rem;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    border: 0.5px solid var(--color-border-secondary);
+    color: var(--color-text-secondary);
+    font-family: 'Source Serif 4', serif;
+    letter-spacing: 0.04em;
+  }
+
+  .world-meter {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+  }
+  .wm-title {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8a7a60;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  .wm-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .wm-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    min-width: 100px;
+  }
+  .wm-bar-bg {
+    flex: 1;
+    height: 4px;
+    background: var(--color-border-tertiary);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .wm-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .wm-val {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    min-width: 28px;
+    text-align: right;
+  }
+
+  .nav-btns {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    margin-top: 2rem;
+  }
+  .nav-btn {
+    font-size: 13px;
+    font-family: 'Source Serif 4', serif;
+    padding: 0.5rem 1.25rem;
+    background: transparent;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+  .nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+  .reflection-panel {
+    margin: 2rem 1.5rem 0;
+    padding: 1.5rem;
+    background: #0a0a0f;
+    border-radius: var(--border-radius-lg);
+    color: #c8bfaf;
+  }
+  .ref-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    font-style: italic;
+    color: #e0d8c8;
+    margin-bottom: 0.75rem;
+  }
+  .ref-body {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: #9a9080;
+  }
+  .ref-question {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 0.5px solid #2a2a3a;
+    font-size: 0.875rem;
+    font-style: italic;
+    color: #7a7060;
+  }
+
+  .all-view { display: none; }
+  .all-view.visible { display: block; }
+  .all-ch-card {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .all-ch-card:hover { background: var(--color-background-secondary); }
+  .all-ch-card:last-child { border-bottom: none; }
+  .acc-year { font-size: 11px; color: #8a7a60; letter-spacing: 0.1em; margin-bottom: 0.3rem; }
+  .acc-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; }
+  .acc-excerpt { font-size: 0.85rem; color: var(--color-text-tertiary); margin-top: 0.3rem; line-height: 1.5; }
+</style>
+
+<h2 class="sr-only">Blog interactivo: Las decisiones de Samuel — Una historia del futuro escrita en 2026 para ser leída en 2036</h2>
+
+<div class="blog-wrap" id="blogWrap">
+
+  <div class="hero">
+    <div class="hero-stars">Escrito en 2026 · Leído en 2036</div>
+    <div class="hero-tag">Blog de memoria · Diez años</div>
+    <h1>Las decisiones<br>de Samuel</h1>
+    <p class="hero-sub">Una crónica del mundo que pudo evitarse, y de un hombre que eligió quedarse.</p>
+    <div class="hero-meta">
+      <span>10 capítulos</span>
+      <span>2026 — 2036</span>
+      <span>Samuel V.</span>
+    </div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="progFill"></div></div>
+
+  <nav class="timeline-nav" id="timelineNav">
+    <button class="tn-btn active" data-ch="0">Todos</button>
+    <button class="tn-btn" data-ch="1">2026</button>
+    <button class="tn-btn" data-ch="2">2027</button>
+    <button class="tn-btn" data-ch="3">2028</button>
+    <button class="tn-btn" data-ch="4">2029</button>
+    <button class="tn-btn" data-ch="5">2030</button>
+    <button class="tn-btn" data-ch="6">2031</button>
+    <button class="tn-btn" data-ch="7">2032</button>
+    <button class="tn-btn" data-ch="8">2033</button>
+    <button class="tn-btn" data-ch="9">2034</button>
+    <button class="tn-btn" data-ch="10">2035</button>
+    <button class="tn-btn" data-ch="11">2036</button>
+  </nav>
+
+  <div class="all-view visible" id="allView">
+    <div id="allCards"></div>
+  </div>
+
+  <div class="chapter" id="ch1">
+    <div class="ch-header">
+      <div class="ch-year">2026</div>
+      <div class="ch-title">El inicio de todo</div>
+    </div>
+    <div class="ch-body">
+      <p>Hoy parece un año normal. Las personas viven pegadas a las redes sociales, la inteligencia artificial avanza cada día más y casi nadie cuestiona la información que consume. Todo es rápido: noticias, opiniones, discusiones y decisiones.</p>
+      <p>Pero Samuel siente que algo no está bien. Mientras todos siguen entretenidos con tendencias y pantallas, él empieza a investigar cómo la tecnología y las redes están cambiando la manera en que las personas piensan, sienten y se relacionan.</p>
+      <p>Descubre noticias falsas, manipulación de información y una sociedad cada vez más dividida. Muchos creen que exagera.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>Contexto histórico</strong>
+      En 2026, más del 60% de la información que las personas consumen llega filtrada por algoritmos diseñados para maximizar el tiempo en pantalla, no para informar. Samuel es uno de los pocos que lo nota.
+    </div>
+    <div class="world-meter" id="wm1"></div>
+    <div class="ch-tags">
+      <span class="tag">Redes sociales</span>
+      <span class="tag">Desinformación</span>
+      <span class="tag">Inicio</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch2">
+    <div class="ch-header">
+      <div class="ch-year">2027</div>
+      <div class="ch-title">Las redes cambian</div>
+    </div>
+    <div class="ch-body">
+      <p>Las redes sociales ya no son solo aplicaciones para entretenerse. Ahora controlan gran parte de la vida diaria: trabajo, educación, comunicación y hasta decisiones políticas. Las personas comienzan a confiar más en algoritmos que en otros seres humanos.</p>
+      <p>Samuel decide hablar. Empieza a compartir lo que descubre, intentando que otros entiendan el peligro de depender completamente de la tecnología. Sin embargo, la mayoría lo ignora. Algunos incluso se burlan de él.</p>
+      <p>Pero los cambios empiezan a sentirse más fuertes.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>Decisión de Samuel</strong>
+      Por primera vez, Samuel elige hablar en lugar de guardar silencio. Esta decisión lo pondrá en el camino de ser voz para quienes aún no ven el peligro.
+    </div>
+    <div class="world-meter" id="wm2"></div>
+    <div class="ch-tags">
+      <span class="tag">Algoritmos</span>
+      <span class="tag">Confianza digital</span>
+      <span class="tag">Primera voz</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch3">
+    <div class="ch-header">
+      <div class="ch-year">2028</div>
+      <div class="ch-title">La división</div>
+    </div>
+    <div class="ch-body">
+      <p>Las discusiones en internet se convierten en conflictos reales. Familias dejan de hablarse, las ciudades se llenan de protestas y los gobiernos empiezan a utilizar tecnologías de vigilancia para controlar el desorden.</p>
+      <p>La desinformación crece tanto que ya nadie sabe qué es verdad y qué es mentira. Samuel comienza a darse cuenta de que el problema ya no son solo las redes, sino el miedo que estas generan en las personas.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>El efecto espejo</strong>
+      Las redes crean "burbujas de filtro" donde cada persona solo ve contenido que confirma sus creencias. El resultado: mundos paralelos que coexisten sin dialogar.
+    </div>
+    <div class="world-meter" id="wm3"></div>
+    <div class="ch-tags">
+      <span class="tag">Polarización</span>
+      <span class="tag">Vigilancia</span>
+      <span class="tag">Miedo social</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch4">
+    <div class="ch-header">
+      <div class="ch-year">2029</div>
+      <div class="ch-title">Comienza la crisis</div>
+    </div>
+    <div class="ch-body">
+      <p>La economía mundial se vuelve inestable. Muchos trabajos desaparecen porque son reemplazados por sistemas automáticos e inteligencia artificial. El desempleo aumenta. La ansiedad y el miedo también.</p>
+      <p>Samuel toma una decisión importante: en vez de quedarse observando, decide ayudar. Empieza a trabajar con pequeños grupos de personas enseñándoles a usar la tecnología de manera responsable y a recuperar la comunicación humana. Todavía hay esperanza.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>La gran sustitución laboral</strong>
+      Según estimaciones de 2029, el 30% de los empleos administrativos y de manufactura han sido automatizados. Las personas más afectadas son las que menos acceso tuvieron a educación tecnológica.
+    </div>
+    <div class="world-meter" id="wm4"></div>
+    <div class="ch-tags">
+      <span class="tag">Automatización</span>
+      <span class="tag">Desempleo</span>
+      <span class="tag">Esperanza</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch5">
+    <div class="ch-header">
+      <div class="ch-year">2030</div>
+      <div class="ch-title">El miedo aumenta</div>
+    </div>
+    <div class="ch-body">
+      <p>Las ciudades empiezan a cambiar. Hay más inseguridad, protestas y escasez de recursos en algunos lugares. Las personas viven desconfiando unas de otras.</p>
+      <p>Los gobiernos crean sistemas de control más estrictos para mantener el orden. Muchas libertades desaparecen lentamente, pero casi nadie lo nota porque todos están demasiado ocupados sobreviviendo.</p>
+      <p>Samuel entiende que el verdadero peligro no es la tecnología, sino perder los valores humanos.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>La normalización del control</strong>
+      Cuando el miedo es suficientemente grande, las personas entregan libertades a cambio de seguridad. Lo que era excepcional se vuelve permanente.
+    </div>
+    <div class="world-meter" id="wm5"></div>
+    <div class="ch-tags">
+      <span class="tag">Control estatal</span>
+      <span class="tag">Libertades civiles</span>
+      <span class="tag">Valores</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch6">
+    <div class="ch-header">
+      <div class="ch-year">2031</div>
+      <div class="ch-title">Aprender a resistir</div>
+    </div>
+    <div class="ch-body">
+      <p>Samuel conoce personas que también quieren cambiar las cosas. Juntos crean espacios para ayudar a comunidades afectadas por la crisis. En medio del caos, Samuel aprende algo fundamental.</p>
+    </div>
+    <div class="ch-quote">
+      "La humanidad no se destruye en un solo día. Se destruye poco a poco cuando las personas dejan de preocuparse por los demás."
+    </div>
+    <div class="ch-body">
+      <p>Aunque el miedo sigue creciendo, él decide mantenerse firme. La resistencia no es violencia — es la decisión de seguir siendo humano.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>El poder de la comunidad</strong>
+      En los momentos de mayor crisis histórica, fueron siempre las comunidades pequeñas y solidarias las que preservaron la cultura, el cuidado y la esperanza colectiva.
+    </div>
+    <div class="world-meter" id="wm6"></div>
+    <div class="ch-tags">
+      <span class="tag">Resistencia</span>
+      <span class="tag">Comunidad</span>
+      <span class="tag">Solidaridad</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch7">
+    <div class="ch-header">
+      <div class="ch-year">2032</div>
+      <div class="ch-title">Las ciudades se apagan</div>
+    </div>
+    <div class="ch-body">
+      <p>Los problemas energéticos y económicos provocan fallas constantes en las grandes ciudades. Algunas zonas quedan incomunicadas durante días. La violencia aumenta. Muchos abandonan sus hogares buscando lugares más seguros.</p>
+      <p>Samuel continúa ayudando, repartiendo recursos y apoyando personas que lo han perdido todo. No puede salvarlo todo, pero puede estar presente.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>El colapso de infraestructura</strong>
+      Las redes eléctricas y de comunicación modernas están altamente interconectadas: cuando falla una parte, el efecto en cadena puede apagar zonas enteras durante semanas.
+    </div>
+    <div class="world-meter" id="wm7"></div>
+    <div class="ch-tags">
+      <span class="tag">Crisis energética</span>
+      <span class="tag">Desplazamiento</span>
+      <span class="tag">Presencia</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch8">
+    <div class="ch-header">
+      <div class="ch-year">2033</div>
+      <div class="ch-title">La pérdida de valores</div>
+    </div>
+    <div class="ch-body">
+      <p>La desesperación hace que muchas personas actúen solo pensando en sobrevivir. Robos, corrupción y violencia se vuelven comunes. Samuel observa cómo el mundo pierde lentamente la empatía.</p>
+      <p>Por eso toma otra decisión importante: mantener sus valores sin importar lo difícil que sea la situación. Ayudar, respetar y proteger a otros se convierte en su propósito.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>La empatía como acto revolucionario</strong>
+      En medio del colapso social, elegir el bien se convierte en un acto subversivo. Samuel no es héroe por su fuerza, sino por su constancia moral.
+    </div>
+    <div class="world-meter" id="wm8"></div>
+    <div class="ch-tags">
+      <span class="tag">Empatía</span>
+      <span class="tag">Moral</span>
+      <span class="tag">Propósito</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch9">
+    <div class="ch-header">
+      <div class="ch-year">2034</div>
+      <div class="ch-title">Caos en las ciudades</div>
+    </div>
+    <div class="ch-body">
+      <p>Las ciudades finalmente colapsan. Los sistemas de transporte fallan, hay escasez de alimentos y los conflictos entre países aumentan hasta convertirse en guerras. Millones de personas intentan escapar.</p>
+      <p>El mundo que existía en 2026 ya no existe. Samuel tiene la oportunidad de irse y salvarse, pero decide quedarse.</p>
+    </div>
+    <div class="ch-insight">
+      <strong>La encrucijada de Samuel</strong>
+      Esta es quizás su decisión más difícil. Irse sería racional. Quedarse es un acto de fe en lo que aún puede hacerse por otros.
+    </div>
+    <div class="world-meter" id="wm9"></div>
+    <div class="ch-tags">
+      <span class="tag">Colapso urbano</span>
+      <span class="tag">Guerra</span>
+      <span class="tag">Elección</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch10">
+    <div class="ch-header">
+      <div class="ch-year">2035</div>
+      <div class="ch-title">El colapso</div>
+    </div>
+    <div class="ch-body">
+      <p>La guerra y el caos destruyen gran parte de la sociedad. La tecnología que antes conectaba al mundo ahora también sirve para controlarlo y destruirlo. Muchos pierden la esperanza.</p>
+      <p>Pero Samuel sigue ayudando a quienes puede: niños, familias y personas heridas. Aunque todo parece perdido, él cree que aún vale la pena luchar por la humanidad.</p>
+    </div>
+    <div class="ch-quote">
+      "Cuando el mundo se rompe, lo que queda no es el sistema. Quedan las personas que eligieron cuidar a las demás."
+    </div>
+    <div class="world-meter" id="wm10"></div>
+    <div class="ch-tags">
+      <span class="tag">Colapso total</span>
+      <span class="tag">Esperanza</span>
+      <span class="tag">Humanidad</span>
+    </div>
+  </div>
+
+  <div class="chapter" id="ch11">
+    <div class="ch-header">
+      <div class="ch-year">2036</div>
+      <div class="ch-title">La decisión final</div>
+    </div>
+    <div class="ch-body">
+      <p>Si estás leyendo esto en 2036, significa que sobrevivimos.</p>
+      <p>Durante diez años vimos cómo el mundo cambió por decisiones equivocadas, por el miedo y por olvidar lo que realmente importa. Mi decisión final fue quedarme a ayudar.</p>
+      <p>Porque entendí que, incluso en medio del caos, las personas todavía pueden elegir quiénes quieren ser. Y tal vez el futuro no depende de la tecnología… sino de las decisiones humanas detrás de ella.</p>
+    </div>
+    <div class="reflection-panel">
+      <div class="ref-title">Una carta para quien lee esto en 2036</div>
+      <div class="ref-body">
+        Diez años son suficientes para ver cómo se construye y cómo se destruye un mundo. No fue la tecnología la que nos llevó al borde — fue el miedo, la desconfianza y el olvido de lo que nos une. Samuel no era un héroe extraordinario. Era alguien ordinario que eligió, una y otra vez, no mirar para otro lado.
+      </div>
+      <div class="ref-question">¿Qué habrías elegido tú?</div>
+    </div>
+    <div class="ch-tags">
+      <span class="tag">Memoria</span>
+      <span class="tag">Elección</span>
+      <span class="tag">Futuro</span>
+      <span class="tag">Humanidad</span>
+    </div>
+  </div>
+
+  <div class="nav-btns" id="navBtns" style="display:none;">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)"><i class="ti ti-arrow-left" aria-hidden="true"></i> Anterior</button>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Siguiente <i class="ti ti-arrow-right" aria-hidden="true"></i></button>
+  </div>
+</div>
+
+<script>
+const chapters = [
+  null,
+  { id:'ch1', year:'2026', title:'El inicio de todo', excerpt:'Samuel siente que algo no está bien mientras el mundo gira en sus pantallas.', meters:[{label:'Conectividad',val:90,color:'#534AB7'},{label:'Desinformación',val:30,color:'#D85A30'},{label:'Miedo social',val:15,color:'#BA7517'},{label:'Esperanza',val:85,color:'#3B6D11'}] },
+  { id:'ch2', year:'2027', title:'Las redes cambian', excerpt:'Las redes dejan de ser entretenimiento y se convierten en infraestructura de vida.', meters:[{label:'Conectividad',val:92,color:'#534AB7'},{label:'Desinformación',val:48,color:'#D85A30'},{label:'Miedo social',val:30,color:'#BA7517'},{label:'Esperanza',val:72,color:'#3B6D11'}] },
+  { id:'ch3', year:'2028', title:'La división', excerpt:'Los conflictos en línea se trasladan a las calles y a los hogares.', meters:[{label:'Conectividad',val:85,color:'#534AB7'},{label:'Desinformación',val:65,color:'#D85A30'},{label:'Miedo social',val:55,color:'#BA7517'},{label:'Esperanza',val:55,color:'#3B6D11'}] },
+  { id:'ch4', year:'2029', title:'Comienza la crisis', excerpt:'La automatización destruye empleos y la economía mundial tiembla.', meters:[{label:'Conectividad',val:78,color:'#534AB7'},{label:'Desinformación',val:72,color:'#D85A30'},{label:'Miedo social',val:68,color:'#BA7517'},{label:'Esperanza',val:45,color:'#3B6D11'}] },
+  { id:'ch5', year:'2030', title:'El miedo aumenta', excerpt:'Los gobiernos restringen libertades. Nadie lo nota, todos sobreviven.', meters:[{label:'Conectividad',val:65,color:'#534AB7'},{label:'Desinformación',val:80,color:'#D85A30'},{label:'Miedo social',val:80,color:'#BA7517'},{label:'Esperanza',val:35,color:'#3B6D11'}] },
+  { id:'ch6', year:'2031', title:'Aprender a resistir', excerpt:'Samuel encuentra aliados. La solidaridad nace donde el sistema falla.', meters:[{label:'Conectividad',val:50,color:'#534AB7'},{label:'Desinformación',val:82,color:'#D85A30'},{label:'Miedo social',val:75,color:'#BA7517'},{label:'Esperanza',val:40,color:'#3B6D11'}] },
+  { id:'ch7', year:'2032', title:'Las ciudades se apagan', excerpt:'La infraestructura falla. Samuel reparte lo que tiene.', meters:[{label:'Conectividad',val:35,color:'#534AB7'},{label:'Desinformación',val:85,color:'#D85A30'},{label:'Miedo social',val:88,color:'#BA7517'},{label:'Esperanza',val:28,color:'#3B6D11'}] },
+  { id:'ch8', year:'2033', title:'La pérdida de valores', excerpt:'La desesperación borra la empatía. Samuel elige no seguir esa corriente.', meters:[{label:'Conectividad',val:25,color:'#534AB7'},{label:'Desinformación',val:88,color:'#D85A30'},{label:'Miedo social',val:93,color:'#BA7517'},{label:'Esperanza',val:20,color:'#3B6D11'}] },
+  { id:'ch9', year:'2034', title:'Caos en las ciudades', excerpt:'Las ciudades colapsan. Samuel puede huir, pero elige quedarse.', meters:[{label:'Conectividad',val:12,color:'#534AB7'},{label:'Desinformación',val:92,color:'#D85A30'},{label:'Miedo social',val:97,color:'#BA7517'},{label:'Esperanza',val:12,color:'#3B6D11'}] },
+  { id:'ch10', year:'2035', title:'El colapso', excerpt:'La guerra destruye lo que quedaba. Samuel sigue ayudando entre los escombros.', meters:[{label:'Conectividad',val:5,color:'#534AB7'},{label:'Desinformación',val:95,color:'#D85A30'},{label:'Miedo social',val:99,color:'#BA7517'},{label:'Esperanza',val:8,color:'#3B6D11'}] },
+  { id:'ch11', year:'2036', title:'La decisión final', excerpt:'Diez años después, Samuel escribe para quienes sobrevivieron.', meters:[{label:'Conectividad',val:20,color:'#534AB7'},{label:'Desinformación',val:60,color:'#D85A30'},{label:'Miedo social',val:70,color:'#BA7517'},{label:'Esperanza',val:55,color:'#3B6D11'}] },
+];
+
+function buildWorldMeter(containerId, meters) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '<div class="wm-title">Estado del mundo</div>' + meters.map(m => `
+    <div class="wm-row">
+      <span class="wm-label">${m.label}</span>
+      <div class="wm-bar-bg"><div class="wm-bar-fill" style="width:${m.val}%;background:${m.color}"></div></div>
+      <span class="wm-val">${m.val}%</span>
+    </div>`).join('');
+}
+
+for(let i=1;i<=11;i++) {
+  if(chapters[i]) buildWorldMeter('wm'+i, chapters[i].meters);
+}
+
+const allCards = document.getElementById('allCards');
+for(let i=1;i<=11;i++) {
+  const c = chapters[i];
+  const d = document.createElement('div');
+  d.className='all-ch-card';
+  d.innerHTML=`<div class="acc-year">${c.year}</div><div class="acc-title">${c.title}</div><div class="acc-excerpt">${c.excerpt}</div>`;
+  d.onclick=()=>showChapter(i);
+  allCards.appendChild(d);
+}
+
+let currentCh = 0;
+
+function showChapter(n) {
+  document.getElementById('allView').classList.remove('visible');
+  for(let i=1;i<=11;i++) document.getElementById('ch'+i).classList.remove('visible');
+
+  document.querySelectorAll('.tn-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tn-btn')[n].classList.add('active');
+
+  if(n===0) {
+    document.getElementById('allView').classList.add('visible');
+    document.getElementById('navBtns').style.display='none';
+    document.getElementById('progFill').style.width='0%';
+    currentCh=0;
+  } else {
+    document.getElementById('ch'+n).classList.add('visible');
+    document.getElementById('navBtns').style.display='flex';
+    document.getElementById('prevBtn').disabled = n===1;
+    document.getElementById('nextBtn').disabled = n===11;
+    document.getElementById('progFill').style.width=((n/11)*100)+'%';
+    currentCh=n;
+    document.getElementById('blogWrap').scrollIntoView({behavior:'smooth'});
+  }
+}
+
+function navigate(dir) {
+  const next = currentCh + dir;
+  if(next>=1 && next<=11) showChapter(next);
+}
+
+document.querySelectorAll('.tn-btn').forEach((btn,i)=>{
+  btn.addEventListener('click',()=>showChapter(i));
+});
+</script>
